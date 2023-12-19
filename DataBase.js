@@ -1,13 +1,12 @@
-const buttonsDataBase = {
+export const buttonsDataBase = {
     machine1 : 
     {
         buttons :
         {
             testButton : {
-                clickAnimation : "c2743d71-8ac2-4259-bd77-96cb5f3bc02c",
                 clickCallBack : () => 
                 {
-
+                    SDK3DVerse.engineAPI.playAnimationSequence("c2743d71-8ac2-4259-bd77-96cb5f3bc02c");
                 }
             }
         }
@@ -16,11 +15,11 @@ const buttonsDataBase = {
     machine3 : {buttons : {startButton:"", stopButton:""}},
 };
 
-const collidDataBase = {
+export const colidDataBase = {
     pad1 : {
-        onColidEvent : (emitterEntity) =>
+        colidCallBack : () =>
         {
-            setGlobalTransform({position : [0,0,0]});
+            
         }
     }
 }

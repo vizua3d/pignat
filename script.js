@@ -1,3 +1,5 @@
+import * as Data from "./DataBase.js"   ;
+
 const canvas = document.getElementById('display-canvas');
 var selectedEntities; 
 var machineParent;
@@ -10,8 +12,8 @@ canvas.addEventListener('mousemove', async (e) =>
     const {entity, pickedPosition, pickedNormal} = await SDK3DVerse.engineAPI.castScreenSpaceRay(e.clientX, e.clientY);
     if (!entity)
         return;
-
-    for (const [machine, machineInfo] of Object.entries(DataBase)) {
+    
+    for (const [machine, machineInfo] of Object.entries(Data.buttonsDataBase)) {
         for (const [buttons, buttonsList] of Object.entries(machineInfo)) {
             for (const [button, buttonInfo] of Object.entries(buttonsList)) {
                 if (button == entity.getName())
@@ -38,24 +40,9 @@ canvas.addEventListener('mousemove', async (e) =>
     //-----------------------------------onClickAction---------------------------------------------
     canvas.addEventListener('mouseup', async () =>
     {
-        
-    if (entity == lookedButton)
-    {
-        var animationUUID = buttonsDataBase[machineParent].buttons[lookedButton.getName()].clickAnimation;
-        if (animonoff == false)
-        {
-            SDK3DVerse.engineAPI.playAnimationSequence(animationUUID);
-            animonoff = true;
-        }
-            
-        else if (animonoff == true)
-        {
-            SDK3DVerse.engineAPI.stopAnimationSequence(animationUUID);
-            animonoff = false;
-        }
-            
-        
-    }
+        if (entity == lookedButton)
+            Data.buttonsDataBase[machineParent].buttons[lookedButton.getName()].clickCallBack();
+
     }, false);
 
 
@@ -63,8 +50,13 @@ canvas.addEventListener('mousemove', async (e) =>
 
 const Teleport_player = (emitterEntity,triggerEntity) =>
 {
-  triggerEntity = triggerEntity.getParent().getName();
-  collidDataBase[triggerEntity].onColidEvent()
-
+    for (const [colidTriggers, colidTriggersInfo] of Object.entries(Data.colidDataBase)) 
+    {
+        if (triggerEntity.getName() == colidTriggers) 
+        {
+            Data.colidDataBase[colidTriggers].triggerCallBack();
+        }
+    }
+    
 }
 SDK3DVerse.engineAPI.onEnterTrigger(Teleport_player);
