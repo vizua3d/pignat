@@ -4,6 +4,7 @@ const canvas = document.getElementById('display-canvas');
 var selectedEntities; 
 var machineParent;
 var lookedButton;
+var lastHoverEntity;
 var animonoff = false;
 
 //-----------------------------------HightLight---------------------------------------------
@@ -18,6 +19,7 @@ canvas.addEventListener('mousemove', async (e) =>
             for (const [button, buttonInfo] of Object.entries(buttonsList)) {
                 if (button == entity.getName())
                 {
+                    lastHoverEntity = entity;
                     machineParent = machine;
                     lookedButton = entity;
                 }
@@ -38,13 +40,16 @@ canvas.addEventListener('mousemove', async (e) =>
     }
 
     //-----------------------------------onClickAction---------------------------------------------
-    canvas.addEventListener('mouseup', async () =>
-    {
-        if (entity == lookedButton)
-            Data.buttonsDataBase[machineParent].buttons[lookedButton.getName()].clickCallBack();
+    
 
-    }, false);
 
+}, false);
+
+canvas.addEventListener('mouseup', async (e) =>
+{
+    const {entity} = await SDK3DVerse.engineAPI.castScreenSpaceRay(e.clientX, e.clientY);
+    if (entity == lookedButton)
+        Data.buttonsDataBase[machineParent].buttons[lookedButton.getName()].clickCallBack();
 
 }, false);
 

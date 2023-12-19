@@ -4,9 +4,9 @@ export const buttonsDataBase = {
         buttons :
         {
             testButton : {
-                clickCallBack : () => 
+                clickCallBack : async () => 
                 {
-                    SDK3DVerse.engineAPI.playAnimationSequence("c2743d71-8ac2-4259-bd77-96cb5f3bc02c");
+                    await SDK3DVerse.engineAPI.playAnimationSequence("7526a81f-145f-436c-af18-0108b383a9aa", {seekOffset : 0});
                 }
             }
         }
