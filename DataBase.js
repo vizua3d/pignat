@@ -11,15 +11,14 @@ export const buttonsDataBase = {
             }
         }
     },
-    machine2 : {buttons : {startButton :"", stopButton:""}},
-    machine3 : {buttons : {startButton:"", stopButton:""}},
+
 };
 
 export const colidDataBase = {
     pad1 : {
         colidCallBack : () =>
         {
-            
+
         }
     }
 }

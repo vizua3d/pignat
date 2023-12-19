@@ -48,7 +48,7 @@ canvas.addEventListener('mousemove', async (e) =>
 
 }, false);
 
-const Teleport_player = (emitterEntity,triggerEntity) =>
+const colidTrigger = (emitterEntity,triggerEntity) =>
 {
     for (const [colidTriggers, colidTriggersInfo] of Object.entries(Data.colidDataBase)) 
     {
@@ -59,4 +59,4 @@ const Teleport_player = (emitterEntity,triggerEntity) =>
     }
     
 }
-SDK3DVerse.engineAPI.onEnterTrigger(Teleport_player);
+SDK3DVerse.engineAPI.onEnterTrigger(colidTrigger);
