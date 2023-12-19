@@ -63,3 +63,10 @@ async function InitFirstPersonController(charCtlSceneUUID) {
   // Finally set the first person camera as the main camera.
   SDK3DVerse.setMainCamera(firstPersonCamera);
 }
+
+
+const Teleport_player = (emitterEntity,triggerEntity) =>
+{
+  emitterEntity.setGlobalTransform({position : [-0.5,0.1,-20.5]});
+}
+SDK3DVerse.engineAPI.onEnterTrigger(Teleport_player);
