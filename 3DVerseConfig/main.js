@@ -8,8 +8,6 @@ import {
 //------------------------------------------------------------------------------
 window.addEventListener("load", InitApp);
 //------------------------------------------------------------------------------
-export var playerController;
-//------------------------------------------------------------------------------
 async function InitApp() {
   await SDK3DVerse.joinOrStartSession({
     userToken: publicToken,
@@ -21,7 +19,6 @@ async function InitApp() {
 
   await InitFirstPersonController(characterControllerSceneUUID);
 }
-
 //------------------------------------------------------------------------------
 async function InitFirstPersonController(charCtlSceneUUID) {
   // To spawn an entity we need to create an EntityTempllate and specify the
@@ -29,6 +26,8 @@ async function InitFirstPersonController(charCtlSceneUUID) {
   // that points to the character controller scene.
   const playerTemplate = new SDK3DVerse.EntityTemplate();
   playerTemplate.attachComponent("scene_ref", { value: charCtlSceneUUID });
+  playerTemplate.attachComponent("local_transform",{position: [0,0,0]});
+  //[-23,5,-15]
 
   // Passing null as parent entity will instantiate our new entity at the root
   // of the main scene.
@@ -42,7 +41,7 @@ async function InitFirstPersonController(charCtlSceneUUID) {
   // Note that an entity template can be instantiated multiple times.
   // Each instantiation results in a new entity.
   const playerSceneEntity = await playerTemplate.instantiateTransientEntity(
-    "Player",
+    "Player".concat('_',SDK3DVerse.getClientUUID()),
     parentEntity,
     deleteOnClientDisconnection
   );
@@ -56,7 +55,6 @@ async function InitFirstPersonController(charCtlSceneUUID) {
   const firstPersonCamera = children.find((child) =>
     child.isAttached("camera")
   );
-  playerController = firstPersonController;
 
   // We need to assign the current client to the first person controller
   // script which is attached to the firstPersonController entity.

@@ -47,17 +47,24 @@ async function onClickButton(e)
 }
 
 //-----------------------------------onColidTrigger---------------------------------------------
-const colidTrigger = (emitterEntity,triggerEntity) =>
+const collideTrigger = (emitterEntity,triggerEntity) =>
 {
-    for (const [collideTriggers, collideTriggersInfo] of Object.entries(Data.collideDataBase)) 
+    for (const [collideGroup, inGroupList] of Object.entries(Data.collideDataBase)) 
     {
-        if (triggerEntity.getName() == collideTriggers) 
+        for (const [collideTriggers, collideTriggersInfo] of Object.entries(inGroupList)) 
         {
-            Data.collideDataBase[collideTriggers].triggerCallBack();
+            if(triggerEntity.getParent().getParent().getName() == collideGroup)
+            {
+                if (triggerEntity.getParent().getName() == collideTriggers ) 
+                {
+                    Data.collideDataBase[collideGroup][collideTriggers].triggerCallBack(emitterEntity);
+                }
+            }
+
         }
     }
 }
-SDK3DVerse.engineAPI.onEnterTrigger(colidTrigger);
+SDK3DVerse.engineAPI.onEnterTrigger(collideTrigger);
 
 
 

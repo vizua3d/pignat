@@ -1,3 +1,5 @@
+
+
 export const buttonsDataBase = {
     machine1 : 
     {
@@ -12,8 +14,17 @@ export const buttonsDataBase = {
             testScreen : {
                 clickCallBack : async () => 
                 {
-                    //const character_controller = playerController.getComponent('character_controller');
-                    // console.log(character_controller);
+                    var playerScene = (await SDK3DVerse.engineAPI.findEntitiesByNames("Player".concat("_",SDK3DVerse.getClientUUID())))[0];
+                    var playerController = (await playerScene.getChildren())[0];
+                    var screenCam = await SDK3DVerse.engineAPI.findEntitiesByNames("screenCam");
+                    SDK3DVerse.setMainCamera(screenCam[0]);
+                    playerController.detachComponent('character_controller');
+                    SDK3DVerse.actionMap.values["MOVE_FORWARD"] = [""];
+                    SDK3DVerse.actionMap.values["LOOK_LEFT"] = [""];
+                    SDK3DVerse.actionMap.values["LOOK_RIGHT"] = [""];
+                    SDK3DVerse.actionMap.values["LOOK_DOWN"] = [""];
+                    SDK3DVerse.actionMap.values["LOOK_UP"] = [""];
+                    //SDK3DVerse.engineAPI.actionMap.reset();
                 }
             }
         }
