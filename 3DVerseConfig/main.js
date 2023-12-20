@@ -7,7 +7,8 @@ import {
 
 //------------------------------------------------------------------------------
 window.addEventListener("load", InitApp);
-
+//------------------------------------------------------------------------------
+export var playerController;
 //------------------------------------------------------------------------------
 async function InitApp() {
   await SDK3DVerse.joinOrStartSession({
@@ -48,12 +49,14 @@ async function InitFirstPersonController(charCtlSceneUUID) {
 
   // The character controller scene is setup as having a single entity at its
   // root which is the first person controller itself.
+  
   const firstPersonController = (await playerSceneEntity.getChildren())[0];
   // Look for the first person camera in the children of the controller.
   const children = await firstPersonController.getChildren();
   const firstPersonCamera = children.find((child) =>
     child.isAttached("camera")
   );
+  playerController = firstPersonController;
 
   // We need to assign the current client to the first person controller
   // script which is attached to the firstPersonController entity.

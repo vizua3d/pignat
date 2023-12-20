@@ -1,67 +1,68 @@
-import * as Data from "./DataBase.js"   ;
+import * as Data from "./DataBase.js";
+
 
 const canvas = document.getElementById('display-canvas');
-var selectedEntities; 
 var machineParent;
-var lookedButton;
-var lastHoverEntity;
-var animonoff = false;
+var lookedObj;
 
 //-----------------------------------HightLight---------------------------------------------
-canvas.addEventListener('mousemove', async (e) =>
+async function HightLight(e)
 {
-    const {entity, pickedPosition, pickedNormal} = await SDK3DVerse.engineAPI.castScreenSpaceRay(e.clientX, e.clientY);
+    const {entity} = await SDK3DVerse.engineAPI.castScreenSpaceRay(e.clientX, e.clientY);
     if (!entity)
         return;
     
     for (const [machine, machineInfo] of Object.entries(Data.buttonsDataBase)) {
-        for (const [buttons, buttonsList] of Object.entries(machineInfo)) {
-            for (const [button, buttonInfo] of Object.entries(buttonsList)) {
-                if (button == entity.getName())
+        for (const [objList, interractionObj] of Object.entries(machineInfo)) {
+            for (const [obj, objInfo] of Object.entries(interractionObj)) {
+                if (obj == entity.getName())
                 {
-                    lastHoverEntity = entity;
                     machineParent = machine;
-                    lookedButton = entity;
+                    lookedObj = entity;
                 }
             }
         }
     }
 
-    if (!lookedButton) {return}
-    else if (entity == lookedButton) 
+    if (!lookedObj) {return}
+    else if (entity == lookedObj) 
     {
-        if (!lookedButton.isSelected())
-            lookedButton.select();
+        if (!lookedObj.isSelected())
+        lookedObj.select();
     }
     else
     { 
         SDK3DVerse.engineAPI.unselectAllEntities();
-        lookedButton = null;
+        lookedObj = null;
     }
+}
 
-    //-----------------------------------onClickAction---------------------------------------------
-    
-
-
-}, false);
-
-canvas.addEventListener('mouseup', async (e) =>
+//-----------------------------------onClickAction---------------------------------------------
+async function onClickButton(e)
 {
     const {entity} = await SDK3DVerse.engineAPI.castScreenSpaceRay(e.clientX, e.clientY);
-    if (entity == lookedButton)
-        Data.buttonsDataBase[machineParent].buttons[lookedButton.getName()].clickCallBack();
+    if (entity == lookedObj)
+        Data.buttonsDataBase[machineParent].interactionObj[lookedObj.getName()].clickCallBack();
 
-}, false);
+}
 
+//-----------------------------------onColidTrigger---------------------------------------------
 const colidTrigger = (emitterEntity,triggerEntity) =>
 {
-    for (const [colidTriggers, colidTriggersInfo] of Object.entries(Data.colidDataBase)) 
+    for (const [collideTriggers, collideTriggersInfo] of Object.entries(Data.collideDataBase)) 
     {
-        if (triggerEntity.getName() == colidTriggers) 
+        if (triggerEntity.getName() == collideTriggers) 
         {
-            Data.colidDataBase[colidTriggers].triggerCallBack();
+            Data.collideDataBase[collideTriggers].triggerCallBack();
         }
     }
-    
 }
 SDK3DVerse.engineAPI.onEnterTrigger(colidTrigger);
+
+
+
+canvas.removeEventListener('mousemove', HightLight, false);
+canvas.removeEventListener('mouseup', onClickButton, false);
+
+canvas.addEventListener('mousemove', HightLight, false);
+canvas.addEventListener('mouseup', onClickButton, false);
