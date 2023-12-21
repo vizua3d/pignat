@@ -53,23 +53,49 @@ const collideTrigger = (emitterEntity,triggerEntity) =>
     {
         for (const [collideTriggers, collideTriggersInfo] of Object.entries(inGroupList)) 
         {
-            if(triggerEntity.getParent().getParent().getName() == collideGroup)
+            if (triggerEntity.getName() == collideTriggers ) 
             {
-                if (triggerEntity.getParent().getName() == collideTriggers ) 
-                {
-                    Data.collideDataBase[collideGroup][collideTriggers].triggerCallBack(emitterEntity);
-                }
+                Data.collideDataBase[collideGroup][collideTriggers].triggerCallBack(emitterEntity);
             }
-
         }
     }
 }
 SDK3DVerse.engineAPI.onEnterTrigger(collideTrigger);
+//-----------------------------------onExitColidTrigger---------------------------------------------
+const exitCollideTrigger = (emitterEntity,triggerEntity) =>
+{
+    for (const [collideGroup, inGroupList] of Object.entries(Data.exitCollideDataBase)) 
+    {
+        for (const [collideTriggers, collideTriggersInfo] of Object.entries(inGroupList)) 
+        {
+            if (triggerEntity.getName() == collideTriggers ) 
+            {
+                Data.exitCollideDataBase[collideGroup][collideTriggers].triggerCallBack(emitterEntity);
+            }
+        }
+    }
+}
+SDK3DVerse.engineAPI.onExitTrigger(exitCollideTrigger);
+//-----------------------------------closeScreen---------------------------------------------
+import { playerController } from "./DataBase.js";
+async function closeScreen()
+{
+    var playerScene = (await SDK3DVerse.engineAPI.findEntitiesByNames("Player".concat("_",SDK3DVerse.getClientUUID())))[0];
+    var playerCam = (await (await playerScene.getChildren())[0].getChildren())[1];
 
+    document.getElementById("tvContainer").style.display = "none";
+    SDK3DVerse.actionMap.reset();
+    SDK3DVerse.actionMap.propagate();
+    playerController.attachComponent('character_controller', playerController);
+    SDK3DVerse.setMainCamera(playerCam);
+}
 
+const closeScreenBtn = document.getElementById('closeScreen');
 
+closeScreenBtn.removeEventListener('click',closeScreen)
 canvas.removeEventListener('mousemove', HightLight, false);
 canvas.removeEventListener('mouseup', onClickButton, false);
 
 canvas.addEventListener('mousemove', HightLight, false);
 canvas.addEventListener('mouseup', onClickButton, false);
+document.getElementById('closeScreen').addEventListener('click',closeScreen)

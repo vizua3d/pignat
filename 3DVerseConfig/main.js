@@ -16,7 +16,6 @@ async function InitApp() {
     createDefaultCamera: false,
     startSimulation: "on-assets-loaded",
   });
-
   await InitFirstPersonController(characterControllerSceneUUID);
 }
 //------------------------------------------------------------------------------
@@ -26,8 +25,8 @@ async function InitFirstPersonController(charCtlSceneUUID) {
   // that points to the character controller scene.
   const playerTemplate = new SDK3DVerse.EntityTemplate();
   playerTemplate.attachComponent("scene_ref", { value: charCtlSceneUUID });
-  playerTemplate.attachComponent("local_transform",{position: [0,0,0]});
-  //[-23,5,-15]
+  playerTemplate.attachComponent("local_transform",{position: [0,0.5,0]});
+  //[-33,0.5,-20]
 
   // Passing null as parent entity will instantiate our new entity at the root
   // of the main scene.
