@@ -28,7 +28,13 @@ async function InitApp() {
   };
 }
 
+//------------------------------------------------------------------------------
+//https://developers.google.com/youtube/iframe_api_reference#Getting_Started
 let player;
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 window.onYouTubePlayerAPIReady = function() {
   if (document.getElementById("player")) {
     document.getElementById("player_container").removeChild(document.getElementById("player"));
@@ -46,13 +52,13 @@ window.onYouTubePlayerAPIReady = function() {
     }
   });
 }
-
-
+//------------------------------------------------------------------------------
 // autoplay video
 function onPlayerReady(event) {
   event.target.playVideo();
 }
-
+//------------------------------------------------------------------------------
+// Control video current time regurlaly when it plays
 let intervalTimerId = null;
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.PLAYING) {
@@ -64,11 +70,11 @@ function onPlayerStateChange(event) {
     currentLabel = null;
   }
 }
-
+//------------------------------------------------------------------------------
+// Focus intended label when currentTime is in a certain period of the video
 let currentLabel = null;
 function checkPlayerCurrentTime() {
   const currentTime = player.getCurrentTime();
-
   const minTimeInsec = Object.keys(youtubeVideo.timeInSecToLabelName);
 
   let t;
